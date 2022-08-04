@@ -8,7 +8,7 @@ import {
 } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import {
   useSavePostMutation,
   useUpdatePostMutation,
@@ -18,8 +18,8 @@ import { Post } from '../types/Post';
 
 const PostForm = (props: { isEdit: boolean }) => {
   const [postItem, setPostItem] = useState<Post>({
-    id: 0,
-    userId: 0,
+    id: '',
+    userId: '',
     title: '',
     body: '',
   });
@@ -47,30 +47,30 @@ const PostForm = (props: { isEdit: boolean }) => {
     setPostItem({ ...data, [name]: value });
   };
 
+  const navigate = useNavigate();
+
   return (
-    <div>
-      <h2>Create Post</h2>
+    <Box>
+      <Typography variant="h4">Create Post</Typography>
 
       <Box
-        width={400}
+        width={600}
         height={260}
         bgcolor={'background.default'}
         color={'text.primary'}
         p={3}
         borderRadius={2}
+        margin={'auto'}
       >
-        <Typography variant="h6" color="#746d6dd6" textAlign="center">
-          Create Post
-        </Typography>
-
         <form
           onSubmit={handleSubmit((postData: Post) => {
             if (isEdit) {
               update(postData);
             } else {
-              // mutate(data);
-              mutate({ body: 'gggg', title: 'kkkk', userId: 1 });
+              mutate(postData);
             }
+
+            navigate('/posts');
           })}
         >
           <FormGroup
@@ -144,7 +144,7 @@ const PostForm = (props: { isEdit: boolean }) => {
           </FormGroup>
         </form>
       </Box>
-    </div>
+    </Box>
   );
 };
 

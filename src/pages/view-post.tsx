@@ -1,18 +1,20 @@
-import React from 'react';
+import { Box, Typography } from '@mui/material';
 import { useParams } from 'react-router-dom';
+import PostDetail from '../components/PostDetail';
 import { useFetchPostQuery } from '../hooks/use-post';
+import { Post } from '../types/Post';
 
-const Post = () => {
-  //   const { postId } = useParams();
+const ViewPost = () => {
+  const { id } = useParams();
 
-  const { data: detail } = useFetchPostQuery('1');
+  const { data } = useFetchPostQuery(id);
 
   return (
-    <div style={{ backgroundColor: 'red' }}>
-      <h2>Post Detail</h2>
-      {/* {detail && <p>{detail?.data?}</p>} */}
-    </div>
+    <Box sx={{ marginTop: 2, marginBottom: 2 }}>
+      <Typography variant="h4">Post Detail</Typography>
+      <PostDetail detail={data as Post} />
+    </Box>
   );
 };
 
-export default Post;
+export default ViewPost;

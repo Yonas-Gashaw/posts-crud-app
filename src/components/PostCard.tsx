@@ -5,7 +5,6 @@ import {
   CardContent,
   Typography,
 } from '@mui/material';
-import { NavLink } from 'react-router-dom';
 import { useDeletePostMutation } from '../hooks/use-post';
 
 const PostCard = ({ post }: any) => {
@@ -24,18 +23,26 @@ const PostCard = ({ post }: any) => {
           maxHeight: 300,
           flexWrap: 'wrap',
           msOverflowY: 'scroll',
+          flexDirection: 'column',
+          justifyContent: 'space-between',
+          position: 'relative',
         }}
       >
         <CardContent>
-          <Typography gutterBottom variant="h5" component="div">
-            {post?.title}
+          <Typography gutterBottom variant="h6" component="div">
+            {post?.title.substring(0, 50)}
           </Typography>
           <Typography variant="body2" color="text.secondary">
-            {post.body}
+            {post.body?.length > 200
+              ? post.body.substring(0, 200) + '...'
+              : post.body}
           </Typography>
         </CardContent>
-        <CardActions>
-          <NavLink to={`/edit/${post.id}`}>Edit</NavLink>
+
+        <CardActions sx={{ position: 'absolute', bottom: 10 }}>
+          <Button href={`/posts/${post.id}`} size="small">
+            View
+          </Button>
 
           <Button size="small" onClick={() => deleteHandler(post.id)}>
             Delete

@@ -1,8 +1,7 @@
 import baseAPI from '../api';
 import { useQuery, useMutation } from '@tanstack/react-query';
 import { Post } from '../types/Post';
-import { useDispatch } from 'react-redux';
-import { fetchPost } from '../store/postSlice';
+import { usePosts } from '../store/post-store';
 
 const savePost = (post: Post) => {
   return baseAPI.post(`posts`, post);
@@ -16,8 +15,9 @@ const deletePost = (id: string) => {
   return baseAPI.delete(`posts/${id}`);
 };
 
-export const getProduct = async (id: string | undefined) => {
+export const getPost = async (id: string | undefined) => {
   const { data } = await baseAPI.get(`posts/${id}`);
+  console.log(data);
   return data;
 };
 
@@ -34,15 +34,14 @@ export const useDeletePostMutation = () => {
 };
 
 export const useFetchPostsQuery = () => {
-  const dispatch = useDispatch();
-
   const { data } = useQuery(['fetch-posts'], () => {
     return baseAPI.get('posts');
   });
 
-  dispatch(fetchPost(data?.data));
+  const dispatch = usePosts((state) => state.getPosts);
+  dispatch(data?.data);
 };
 
 export const useFetchPostQuery = (id: string | undefined) => {
-  return useQuery(['fetch-post', id], () => getProduct(id));
+  return useQuery(['fetch-post', id], () => getPost(id));
 };
